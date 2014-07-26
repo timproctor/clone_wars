@@ -1,6 +1,7 @@
 require 'rack/test'
 require 'sinatra/base'
 require './test/test_helper'
+require './lib/app'
 
 
 describe CloneWarsApp do
