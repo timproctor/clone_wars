@@ -13,14 +13,13 @@ class Location
     @description   = attributes[:description]
   end
 
-#   DB = Sequel.sqlite
-
-#   DB.create_table :location do
-#     primary_key :id
-#     String :name
-#     String :address
-#     String :phone_number
-#     String :email_address
-#     String :description
-#   end
+  def to_h
+    {
+      'name'          => name,
+      'address'       => address,
+      'phone_number'  => phone_number,
+      'email_address' => email_address,
+      'description'   => description
+    }
+  end
 end

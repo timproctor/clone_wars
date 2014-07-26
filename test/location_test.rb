@@ -16,4 +16,5 @@ class LocationTest < Minitest::Test
     location = Location.new(location_data)
     assert_equal "Jon Snow", location.name
   end
+  
 end
