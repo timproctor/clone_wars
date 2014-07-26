@@ -1,6 +1,7 @@
 class CloneWarsApp < Sinatra::Base
 
-  set :public_folder, File.dirname(__FILE__) + '/public'
+  set :root, 'lib/app'
+  set :public_folder, File.dirname(__FILE__) + '/app/public'
 
   get '/' do
     haml :index
