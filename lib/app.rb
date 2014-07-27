@@ -3,19 +3,12 @@ class CloneWarsApp < Sinatra::Base
   set :root, 'lib/app'
   set :public_folder, File.dirname(__FILE__) + '/app/public'
 
-  DB = Sequel.sqlite # creates a sqlite database in memory
-
-  # creates a table named items
-  DB.create_table :items do
-    primary_key :id
-    String :name
-    String :price
-  end
-
-  items = DB['items']
-
   get '/' do
     haml :index
+  end
+
+  post '/location_test' do
+    Database.update(:location, params[:location])
   end
 
   get '/catering' do
