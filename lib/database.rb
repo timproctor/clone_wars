@@ -1,26 +1,14 @@
-require 'sequel'
 require 'sqlite3'
+require 'sequel'
+require 'pry'
 
 class Database
-  def self.database
-    @db = Sequel.sqlite('cafecolore.db')
-
-    unless @db.table_exists?(:location)
-      @db.create_table :location do
-        primary_key :id
-        String :name
-        String :address
-        String :phone_number
-        String :email_address
-        String :description
-      end
+  def initialize(name)
+    @db = Sequel.sqlite("#{name}.db")
+    @db.create_table name.to_sym do
+      primary_key :id
     end
-    @db
-  end
-
-  def self.update(table, data)
-    table = database[table]
-    location = Location.new(data)
-    table.update(location.to_h)
   end
 end
+
+

@@ -3,12 +3,22 @@ class CloneWarsApp < Sinatra::Base
   set :root, 'lib/app'
   set :public_folder, File.dirname(__FILE__) + '/app/public'
 
+  configure do
+    enable :sessions
+    set :username, 'jon'
+    set :password, 'snow'
+  end
+
   get '/' do
     haml :index
   end
 
-  post '/location_test' do
-    Database.update(:location, params[:location])
+  get '/login' do
+    haml :login
+  end
+
+  post '/login' do
+    
   end
 
   get '/catering' do
@@ -29,6 +39,12 @@ class CloneWarsApp < Sinatra::Base
 
   get '/specialties' do
     haml :specialties
+  end
+
+  def authenticate!
+    if params[:username] == settings.username && params[:password] == settings.password
+      sessions[:admin] = true
+    end
   end
 
 end

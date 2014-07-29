@@ -2,8 +2,15 @@ require './test/test_helper'
 require './lib/database'
 
 describe 'Database' do
+  it "creates a database" do
+    refute File.exists?('awesome_database.db'), 'Crap, there is already a DB!'
+    db = Database.new('awesome_database')
+    assert File.exists?('awesome_database.db'), 'Where is my database?'
+    assert db.has_key?(:awesome_database)
+  end
 
   it "updates a database" do
+    skip
     # check the data in the database
     db = Sequel.sqlite('testing_db.db')
 
