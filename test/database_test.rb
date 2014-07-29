@@ -2,11 +2,15 @@ require './test/test_helper'
 require './lib/database'
 
 describe 'Database' do
+  def delete_database
+    File.delete(File.expand_path('~/Documents/Projects/clone_wars/awesome_database.db'))
+  end
+
   it "creates a database" do
     refute File.exists?('awesome_database.db'), 'Crap, there is already a DB!'
     db = Database.new('awesome_database')
     assert File.exists?('awesome_database.db'), 'Where is my database?'
-    assert db.has_key?(:awesome_database)
+    delete_database
   end
 
   it "updates a database" do
