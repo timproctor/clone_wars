@@ -1,5 +1,3 @@
-require_relative 'login'
-
 class CloneWarsApp < Sinatra::Base
 
   set :root, 'lib/app'
@@ -20,18 +18,11 @@ class CloneWarsApp < Sinatra::Base
   end
 
   post '/login' do
-    login = Login.new(params[:username], params[:password])
 
-    if login.authenticated?
-      session[:admin] = true
+    if authenticate?
+      redirect ('/login/admin_dashboard')
     else
-      session[:admin] = false
-    end
-
-    if session[:admin] == true
-      redirect '/login/admin_dashboard'
-    else
-      redirect '/login/login_failed'
+      redirect ('/login/login_failed')
     end
   end
 
@@ -61,6 +52,12 @@ class CloneWarsApp < Sinatra::Base
 
   get '/specialties' do
     haml :specialties
+  end
+
+  def authenticate?
+    if params[:username] == settings.username && params[:password] == settings.password
+      session[:admin] = true
+    end
   end
 
 end
