@@ -10,5 +10,5 @@ class Login
   def authenticated?
     username == "jon" && password == "snow"
   end
-  
+
 end
