@@ -1,7 +1,8 @@
 require_relative 'feature_test_helper'
 
 class UserLogsAsAdmin < FeatureTest
-  def test_user_can_log_in_as_admin
+
+  def test_user_fails_to_log_in_as_admin
     visit '/'
     assert_equal 200, page.status_code
 
@@ -13,9 +14,17 @@ class UserLogsAsAdmin < FeatureTest
     click_button('Login')
 
     assert page.has_content?("Login failed")
-
-    # verify that we dont move on to the login page
-    # verify that with incorrect login takes you to unsuccessful login page
-    assert 
   end
+
+  def test_user_successfully_logs_in_as_admin
+    visit '/login'
+    assert_equal 200, page.status_code
+
+    fill_in('username', with: 'jon')
+    fill_in('password', with: 'snow')
+    click_button('Login')
+
+    assert page.has_css?('.admin-header')
+  end
+
 end
