@@ -1,4 +1,5 @@
 class Location
+
   attr_reader :name,
               :address,
               :phone_number,
@@ -22,4 +23,5 @@ class Location
       'description'   => description
     }
   end
+  
 end

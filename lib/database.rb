@@ -42,4 +42,5 @@ class Database
     binding.pry
     db[table].where(data).update.to_a
   end
+  
 end

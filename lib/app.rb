@@ -2,6 +2,7 @@ class CloneWarsApp < Sinatra::Base
 
   set :root, 'lib/app'
   set :public_folder, File.dirname(__FILE__) + '/app/public'
+  set :session_secret, "calm"
 
   configure do
     enable :sessions
@@ -17,22 +18,31 @@ class CloneWarsApp < Sinatra::Base
     haml :login
   end
 
+  get '/logout' do
+    session.clear
+    redirect '/'
+  end
+
   post '/login' do
-    if authenticate?
-      redirect ('/login/admin_dashboard')
+    authenticate
+
+    if authenticated?
+      redirect '/login/admin_dashboard'
     else
-      redirect ('/login/login_failed')
+      redirect '/login/login_failed'
     end
   end
 
   get '/login/admin_dashboard' do
-    if session[:admin] == true
-      haml :admin_dashboard
-    else
-      halt 403, "please log in to access admin features"
-    end
+    halt 401, 'GTFO' unless authenticated?
+    haml :admin_dashboard
   end
 
+  get '/login/admin_dashboard/menu' do
+    halt 401, 'GTFO' unless authenticated?
+    haml :edit_menu
+  end
+  
   get '/login/login_failed' do
     haml :login_failed
   end
@@ -47,7 +57,7 @@ class CloneWarsApp < Sinatra::Base
 
   get '/menu_dinner' do
     haml :menu_dinner
-  end
+  end 
 
   get '/restaurant' do
     haml :restaurant
@@ -57,10 +67,14 @@ class CloneWarsApp < Sinatra::Base
     haml :specialties
   end
 
-  def authenticate?
+  def authenticate
     if params[:username] == settings.username && params[:password] == settings.password
       session[:admin] = true
     end
+  end
+
+  def authenticated?
+    session[:admin] == true
   end
 
 end

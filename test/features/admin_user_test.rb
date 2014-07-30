@@ -34,20 +34,45 @@ class AdminUserTest < FeatureTest
     click_button('Login')
   end
 
-  def test_admin_can_visit_the_admin_console
+  def test_it_can_select_location_from_the_admin_dashboard
+    skip
+  end
+
+  def test_that_an_admin_user_can_log_out
     login_as_admin
+    click_button('Logout')
+    visit '/login/admin_dashboard'
+    assert_equal 401, page.status_code
+  end
+    
+  def test_it_can_select_menu_on_admin_dashboard
+    login_as_admin
+    click_link('Menu')
 
     assert_equal 200, page.status_code
-    assert page.has_css?(".admin-header")
+    assert_equal "http://www.example.com/login/admin_dashboard/menu", page.current_url
+    assert page.has_css?('.edit-menu-header')
   end
 
-  def test_it_can_select_location_from_the_admin_dashboard
-    
+  def test_an_admin_user_can_add_a_menu_item
+    login_as_admin
+    click_link('Menu')
+    click_button('+')
+
+    assert_equal "http://www.example.com/login/admin_dashboard/menu/add_menu_item", page.current_url
+
+    fill_in('name', with: 'mushroom salad')
+    fill_in('ingredients', with: 'mushrooms')
+    fill_in('price', with: '100')
+    fill_in('description', with: 'who the fuck is making a mushroom salad')
+    click_button('add')
+
+    assert page.has_content?("mushroom salad")
+
   end
-    # it 'can select menu on admin dashboard'
+
     # it 'can see location editor page'
     # it 'can edit a location'
-    # it 'can see menu editor page'
     # it 'can add a menu item'
     # it 'can delete a menu item'
     # it 'can update a menu item'
