@@ -6,7 +6,7 @@ class UserLogsAsAdmin < FeatureTest
     visit '/'
     assert_equal 200, page.status_code
 
-    click_link('Login bitch')
+    click_link('Login Here')
     assert_equal 200, page.status_code
 
     fill_in('username', with: 'ned')

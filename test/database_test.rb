@@ -2,62 +2,81 @@ require './test/test_helper'
 require './lib/database'
 
 describe 'Database' do
-  def delete_database
-    File.delete(File.expand_path('~/Documents/Projects/clone_wars/awesome_database.db'))
+
+  def teardown
+    File.delete(File.expand_path('test_database.db'))
   end
 
   it "creates a database" do
-    refute File.exists?('awesome_database.db'), 'Crap, there is already a DB!'
-    db = Database.new('awesome_database')
-    assert File.exists?('awesome_database.db'), 'Where is my database?'
-    delete_database
+    refute File.exists?('test_database.db'), 'Crap, there is already a DB!'
+    db = Database.new('test_database')
+    assert File.exists?('test_database.db'), 'Where is my database?'
   end
 
-  it "updates a database" do
-    skip
-    # check the data in the database
-    db = Sequel.sqlite('testing_db.db')
+  it "creates all the tables" do
+    database = Database.new('test_database')
 
-    unless db.table_exists?(:test_table)
-      db.create_table :test_table do
-        primary_key :id
-        String :name
-        String :age
-      end
-    end
+    menu     = database.db[:menu]
+    location = database.db[:location]
 
-    test_table = db[:test_table]
-    test_table.delete
-
-    test_table.insert(name: "You know nothing Jon Snow", age: "500")
-
-    a = test_table.select.to_a
-    assert_equal a[0][:age], "500"
-
-    # call the update method and pass in new data
-    class Person
-      attr_reader :name, :age
-
-      def initialize(name, age)
-        @name = name
-        @age = age
-      end
-
-      def to_h
-        {
-          name: name,
-          age: age
-        }
-      end
-    end
-
-    person = Person.new("Charlie", "1000")
-    table = :test_table
-
-    Database.update(table, person.to_h)
-    a = test_table.select.to_a
-
-    assert_equal a[0][:age], "1000"
-    # check that the data in the database is correct
+    assert menu
+    assert location
+    assert_includes menu.columns, :ingredients
+    assert_includes location.columns, :description
   end
+
+  it "adds an entry to the database" do
+    database = Database.new('test_database')
+    menu = database.db[:menu]
+
+    assert_equal 0, menu.count
+
+    database.create_entry(:menu, name: "Gyro", ingredients: "goodshit")
+    entry = menu.select.where(name: 'Gyro').to_a.first
+
+    assert_equal 'Gyro', entry[:name]
+  end
+
+  it "finds some data from the database" do
+    database = Database.new('test_database')
+    database.create_entry(:menu,
+                          name: "mushroom salad",
+                          ingredients: "mushrooms?",
+                          description: "this is a salad asshole",
+                          price: "100")
+
+    menu = database.db[:menu]
+
+    data = {
+      name: "mushroom salad"
+    }
+
+    search_data = database.find(:menu, data)
+
+    assert_equal "mushroom salad", search_data.first[:name]
+  end
+
+  # it "gives me a reach around"
+  # it "updates data from the database" do
+  #   #assert something exists in the database
+  #   database = Database.new('test_database')
+  #   database.create_entry(:menu,
+  #                         name: "mushroom salad",
+  #                         ingredients: "mushrooms?",
+  #                         description: "this is a salad asshole",
+  #                         price: "100")
+  #
+  #   # menu = database.db[:menu]
+  #   entry = database.find(:menu, name: 'mushroom salad')
+  #
+  #   assert_equal 'mushroom salad', entry.first[:name]
+  #
+  #   #update the existing database entry
+  #   updated_entry = database.update(:menu, name: 'gravy tacos', description: 'hi')
+  #
+  #   assert_equal 'gravy tacos', updated_entry.first[:name]
+  #   #verify that data is updated
+  #
+  # end
+
 end

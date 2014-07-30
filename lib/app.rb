@@ -18,7 +18,6 @@ class CloneWarsApp < Sinatra::Base
   end
 
   post '/login' do
-
     if authenticate?
       redirect ('/login/admin_dashboard')
     else
