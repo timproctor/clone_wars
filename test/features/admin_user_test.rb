@@ -44,7 +44,7 @@ class AdminUserTest < FeatureTest
     visit '/login/admin_dashboard'
     assert_equal 401, page.status_code
   end
-    
+
   def test_it_can_select_menu_on_admin_dashboard
     login_as_admin
     click_link('Menu')
@@ -59,16 +59,13 @@ class AdminUserTest < FeatureTest
     click_link('Menu')
     click_button('+')
 
-    assert_equal "http://www.example.com/login/admin_dashboard/menu/add_menu_item", page.current_url
+    fill_in('name', with: 'mushroom salad'), "Got a name, bro!"
+    fill_in('ingredients', with: 'mushrooms'), "Got ingredients, dude!"
+    fill_in('price', with: '100'), "Got price, yo!"
+    click_button('add') "Where does your add go?"
 
-    fill_in('name', with: 'mushroom salad')
-    fill_in('ingredients', with: 'mushrooms')
-    fill_in('price', with: '100')
-    fill_in('description', with: 'who the fuck is making a mushroom salad')
-    click_button('add')
-
-    assert page.has_content?("mushroom salad")
-
+    assert page.has_content?("mushroom salad"), "where's my mushroom salad content?"
+    assert_equal "http://www.example.com/login/admin_dashboard/menu", page.current_url
   end
 
     # it 'can see location editor page'
