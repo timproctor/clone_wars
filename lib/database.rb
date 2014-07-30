@@ -15,8 +15,8 @@ unless DB.table_exists?(:menu_items)
   end
 end
 
-unless DB.table_exists?(:locations)
-  DB.create_table :locations do
+unless DB.table_exists?(:location)
+  DB.create_table :location do
     primary_key :id
     String      :address
     String      :email_address

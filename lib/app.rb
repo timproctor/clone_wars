@@ -1,9 +1,9 @@
 require_relative "./database"
 require_relative "./app/models/location"
 require_relative "./app/models/menu_items"
-require 'pry'
 
 class CloneWarsApp < Sinatra::Base
+  # DB 
   set :root, 'lib/app'
   set :public_folder, File.dirname(__FILE__) + '/app/public'
   set :session_secret, "calm"
