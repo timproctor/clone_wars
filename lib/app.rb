@@ -26,7 +26,11 @@ class CloneWarsApp < Sinatra::Base
   end
 
   get '/login/admin_dashboard' do
-    haml :admin_dashboard
+    if session[:admin] == true
+      haml :admin_dashboard
+    else
+      halt 403, "please log in to access admin features"
+    end
   end
 
   get '/login/login_failed' do
