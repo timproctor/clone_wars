@@ -47,6 +47,12 @@ class CloneWarsApp < Sinatra::Base
     haml :edit_menu
   end
 
+  post '/login/admin_dashboard/menu/add_menu_item' do
+    halt 401, 'GTFO' unless authenticated?
+    haml :add_menu_item
+    # redirect '/login/admin_dashboard/menu'
+  end
+
   get '/login/login_failed' do
     haml :login_failed
   end
