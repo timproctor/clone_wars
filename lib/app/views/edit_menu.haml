@@ -1,3 +1,11 @@
 %h1.edit-menu-header Edit the menu here bitch
-%form{action: '/login/admin_dashboard/menu/add_menu_item', method: 'POST'}
+%form{action: '/login/admin_dashboard/menu/add_menu_item', method: 'GET'}
   %input{type: 'submit', value: '+'}
+%ul
+  - menu_items.each do |menu_item|
+    %li
+      %form{action: 'login/admin_dashboard/menu/#{menu_item[:id]}', method: 'GET', style: 'display: inline'}
+        %input{type: 'submit', value: 'edit'}
+        = menu_item[:name]
+        = menu_item[:ingredients]
+        = menu_item[:price]

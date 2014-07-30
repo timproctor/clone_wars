@@ -3,7 +3,7 @@ require_relative "./app/models/location"
 require_relative "./app/models/menu_items"
 
 class CloneWarsApp < Sinatra::Base
-  # DB 
+  # DB
   set :root, 'lib/app'
   set :public_folder, File.dirname(__FILE__) + '/app/public'
   set :session_secret, "calm"
@@ -44,13 +44,19 @@ class CloneWarsApp < Sinatra::Base
 
   get '/login/admin_dashboard/menu' do
     halt 401, 'GTFO' unless authenticated?
-    haml :edit_menu
+    haml :edit_menu, locals:{menu_items: DB[:menu_items].all}
+  end
+
+
+  get '/login/admin_dashboard/menu/add_menu_item' do
+    halt 401, 'GTFO' unless authenticated?
+    haml :add_menu_item
   end
 
   post '/login/admin_dashboard/menu/add_menu_item' do
     halt 401, 'GTFO' unless authenticated?
-    haml :add_menu_item
-    # redirect '/login/admin_dashboard/menu'
+    DB[:menu_items].insert(params[:menu])
+    redirect '/login/admin_dashboard/menu'
   end
 
   get '/login/login_failed' do

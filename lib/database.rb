@@ -10,7 +10,6 @@ unless DB.table_exists?(:menu_items)
     primary_key :id
     String      :name
     String      :ingredients
-    String      :description
     String      :price
   end
 end
