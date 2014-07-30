@@ -1,0 +1,14 @@
+body {
+  bgcolor: "#999999";
+  leftmargin: "0";
+  marginheight: "0";
+  marginwidth: "0";
+  onload:
+    "MM_preloadImages('images/Colore_Main2_MO_06.gif',
+    'images/Colore_Main2_MO_08.gif',
+    'images/Colore_Main2_MO_09.gif',
+    'images/Colore_Main2_MO_10.gif',
+    'images/Colore_Main2_MO_11.gif')";
+  text: "#000000";
+  topmargin: "0";
+}

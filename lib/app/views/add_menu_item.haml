@@ -1,0 +1,6 @@
+%h1.add-menu-item-header Add Menu Item
+%form{action: "/login/admin_dashboard/menu/add_menu_item", method: "POST"}
+  %input{name: 'name', type: 'text', placeholder: "Item Name"}
+  %textarea{name: 'ingredients', placeholder: "Item Ingredients"}
+  %input{name: 'price', type: 'text', placeholder: "Price"}
+    %input{type: 'submit', value: 'add'}
