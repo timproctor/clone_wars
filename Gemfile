@@ -6,6 +6,7 @@ gem 'haml',            require: 'haml'
 gem 'sequel',          require: 'sequel'
 gem 'sqlite3'
 gem 'rake'
+gem 'pony'
 
 group :development do
   gem 'shotgun'

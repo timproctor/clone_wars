@@ -45,7 +45,7 @@ class CloneWarsApp < Sinatra::Base
 
   get '/login/admin_dashboard/location' do
     display_forbidden_if_non_admin
-    haml :edit_location, locals: {location: DB[:location].all.first} 
+    haml :edit_location, locals: {location: DB[:location].all.first}
   end
 
   get '/login/admin_dashboard/location/:id' do |id|
@@ -133,6 +133,35 @@ class CloneWarsApp < Sinatra::Base
     haml :specialties
   end
 
+  get '/contact' do
+    haml :contact
+  end
+
+  post '/contact' do
+    require 'pony'
+
+    Pony.mail(
+      :from => params[:name] + "<" + params[:email] + ">",
+      :to => 'notarealemail192@gmail.com',
+      :subject => params[:name] + " has contacted you",
+      :body => params[:message],
+      :via => :smtp,
+      :via_options => {
+        :address              => 'smtp.gmail.com',
+        :port                 => '587',
+        :enable_starttls_auto => true,
+        :user_name            => 'notarealemail192',
+        :password             => 'notapassword',
+        :authentication       => :plain,
+        :domain               => 'localhost.localdomain'
+      })
+
+    redirect '/success'
+  end
+
+  get '/success' do
+    haml :success
+  end
   # helpers
   def authenticate
     if params[:username] == settings.username && params[:password] == settings.password
