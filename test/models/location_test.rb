@@ -1,5 +1,5 @@
-require './test/test_helper'
-require './lib/location'
+require './test/models/model_test_helper'
+require './lib/app/models/location'
 
 class LocationTest < Minitest::Test
   def location_data
@@ -17,5 +17,5 @@ class LocationTest < Minitest::Test
     assert_equal "Jon Snow", location.name
   end
 
-  
+
 end

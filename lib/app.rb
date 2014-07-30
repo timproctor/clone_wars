@@ -1,5 +1,9 @@
-class CloneWarsApp < Sinatra::Base
+require_relative "./database"
+require_relative "./app/models/location"
+require_relative "./app/models/menu_items"
+require 'pry'
 
+class CloneWarsApp < Sinatra::Base
   set :root, 'lib/app'
   set :public_folder, File.dirname(__FILE__) + '/app/public'
   set :session_secret, "calm"
@@ -42,7 +46,7 @@ class CloneWarsApp < Sinatra::Base
     halt 401, 'GTFO' unless authenticated?
     haml :edit_menu
   end
-  
+
   get '/login/login_failed' do
     haml :login_failed
   end
@@ -57,7 +61,7 @@ class CloneWarsApp < Sinatra::Base
 
   get '/menu_dinner' do
     haml :menu_dinner
-  end 
+  end
 
   get '/restaurant' do
     haml :restaurant
