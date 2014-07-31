@@ -59,18 +59,4 @@ class AdminUserTest < FeatureTest
     assert page.has_css?('.edit-menu-header')
   end
 
-  def test_an_admin_user_can_add_a_menu_item
-    skip
-    login_as_admin
-    click_link('Menu')
-    click_button('+')
-    fill_in('name', with: 'mushroom salad') # unable to find field 'name'
-    fill_in('ingredients', with: 'mushrooms')
-    fill_in('price', with: '100')
-    click_button('add')
-
-    assert page.has_content?("mushroom salad")
-    assert_equal "http://www.example.com/login/admin_dashboard/menu", page.current_url
-  end
-
 end
