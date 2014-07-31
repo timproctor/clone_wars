@@ -1,0 +1,15 @@
+%p Contact Us:
+%form{:action => "/contact", :method => "post"}
+  %label{:for => "name"} Your Name:
+  %br
+  %input{:name => "name", :type => "text"}
+  %br
+  %label{:for => "email"} Your email address:
+  %br
+  %input{:name => "email", :type => "text"}
+  %br
+  %label{:for => "to"} Your message:
+  %br
+  %textarea{:cols => "60", :name => "message", :rows => "10"}
+  %br
+  %input{:type => "submit", :value => "Send"}

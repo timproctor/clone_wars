@@ -1,0 +1,8 @@
+%h1.admin-header Admin Dashboard
+%ul
+  %li
+    %a{href: "/login/admin_dashboard/menu"} Menu
+  %li
+    %a{href: "/login/admin_dashboard/location"} Location
+  %form{action: '/logout', method: 'GET'}
+    %input{type: 'submit', value: 'Logout'}

@@ -1,0 +1,9 @@
+%h1 Admin Login:
+%form{action: "/login", method: "POST"}
+  %div
+    Username:
+    %input{type: "text", name: "username", placeholder: "Username..."}
+    %br
+    Password:
+    %input{type: "password", name: "password", placeholder: "Password..."}
+    %input{type: "submit", value: "Login"}
