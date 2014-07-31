@@ -1,6 +1,6 @@
 require 'bundler'
 Bundler.require
 
-require_relative 'app'
+require './lib/app'
 
 run CloneWarsApp
