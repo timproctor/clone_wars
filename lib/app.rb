@@ -7,6 +7,7 @@ class CloneWarsApp < Sinatra::Base
   set :root, 'lib/app'
   set :public_folder, File.dirname(__FILE__) + '/app/public'
   set :session_secret, "calm"
+  set :method_override, true
 
   configure do
     enable :sessions
@@ -58,6 +59,27 @@ class CloneWarsApp < Sinatra::Base
     DB[:menu_items].insert(params[:menu])
     redirect '/login/admin_dashboard/menu'
   end
+
+  delete '/login/admin_dashboard/menu/:id' do |id|
+    DB[:menu_items].where(:id=>id.to_i).delete
+    redirect '/login/admin_dashboard/menu'
+  end
+
+  get '/login/admin_dashboard/menu/:id' do |id|
+    menu_item = DB[:menu_items].where(:id => id.to_i).to_a.first
+    haml :edit_menu_item, locals: {menu_item: menu_item}
+  end
+
+  put '/login/admin_dashboard/menu/:id' do |id|
+    menu_item               = DB[:menu_items].where(:id => id.to_i).to_a.first
+    menu_item[:name]        = params[:name]
+    menu_item[:ingredients] = params[:ingredients]
+    menu_item[:price]       = params[:price]
+
+    DB[:menu_items].where(:id => id.to_i).update(menu_item)
+    redirect '/login/admin_dashboard/menu'
+  end
+
 
   get '/login/login_failed' do
     haml :login_failed

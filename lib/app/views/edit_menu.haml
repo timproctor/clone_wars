@@ -1,11 +1,16 @@
-%h1.edit-menu-header Edit the menu here bitch
+%h1.edit-menu-header Edit the menu here bra
 %form{action: '/login/admin_dashboard/menu/add_menu_item', method: 'GET'}
   %input{type: 'submit', value: '+'}
-%ul
+%table{border: "10"}
   - menu_items.each do |menu_item|
-    %li
-      %form{action: 'login/admin_dashboard/menu/#{menu_item[:id]}', method: 'GET', style: 'display: inline'}
-        %input{type: 'submit', value: 'edit'}
-        = menu_item[:name]
-        = menu_item[:ingredients]
-        = menu_item[:price]
+    %tr
+      %td
+        %form{action: "/login/admin_dashboard/menu/#{menu_item[:id]}", method: 'GET', style: 'display: inline'}
+          %input{type: 'submit', value: 'edit'}
+      %td= menu_item[:name]
+      %td= menu_item[:ingredients]
+      %td= menu_item[:price]
+      %td
+        %form{action: "/login/admin_dashboard/menu/#{menu_item[:id]}", method: 'POST', style: 'display: inline'}
+          %input{name: '_method', type: 'hidden', value: 'DELETE'}
+            %input{type: 'submit', value: 'delete'}
