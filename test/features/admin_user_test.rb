@@ -35,17 +35,21 @@ class AdminUserTest < FeatureTest
   end
 
   def test_it_can_select_location_from_the_admin_dashboard
-    skip
+    login_as_admin
+    click_link('Location')
+
+    assert_equal "http://www.example.com/login/admin_dashboard/location", page.current_url
   end
 
   def test_that_an_admin_user_can_log_out
     login_as_admin
     click_button('Logout')
     visit '/login/admin_dashboard'
+
     assert_equal 401, page.status_code
   end
 
-  def test_it_can_select_menu_on_admin_dashboard
+  def test_it_can_select_menu_from_the_admin_dashboard
     login_as_admin
     click_link('Menu')
 
@@ -59,23 +63,24 @@ class AdminUserTest < FeatureTest
     login_as_admin
     click_link('Menu')
     click_button('+')
-    print "I suck"
-    # fill_in('name', with: 'mushroom salad')
-    find("name").set("mushroom salad")
+    fill_in('name', with: 'mushroom salad') # unable to find field 'name'
     fill_in('ingredients', with: 'mushrooms')
     fill_in('price', with: '100')
     click_button('add')
-    print "I made it past block"
+
     assert page.has_content?("mushroom salad")
     assert_equal "http://www.example.com/login/admin_dashboard/menu", page.current_url
   end
 
-  
-
     # it 'can see location editor page'
     # it 'can edit a location'
     # it 'can add a menu item'
+    def test_admin_user_can_edit_a_menu_item
+      # check non-admin user can't do any of this
+      # check admin user can
+      visit 'login/admin_dashboard/menu/1'
+      assert 401, page.status_code
+    end
     # it 'can delete a menu item'
     # it 'can update a menu item'
-
 end

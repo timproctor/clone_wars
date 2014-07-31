@@ -1,0 +1,14 @@
+%h1.edit-menu-header Edit Location
+%table{border: "10"}
+  %tr
+    %td
+      %form{action: "/login/admin_dashboard/location/#{location[:id]}", method: 'GET', style: 'display: inline'}
+        %input{type: 'submit', value: 'edit'}
+    %td= location[:address]
+    %td= location[:email_address]
+    %td= location[:phone_number]
+    %td= location[:description]
+    %td
+      %form{action: "/login/admin_dashboard/menu/#{location[:id]}", method: 'POST', style: 'display: inline'}
+        %input{name: '_method', type: 'hidden', value: 'DELETE'}
+        %input{type: 'submit', value: 'delete'}

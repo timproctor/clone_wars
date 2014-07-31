@@ -5,6 +5,7 @@ gem 'sinatra-contrib', require: 'sinatra/reloader'
 gem 'haml',            require: 'haml'
 gem 'sequel',          require: 'sequel'
 gem 'sqlite3'
+gem 'rake'
 
 group :development do
   gem 'shotgun'

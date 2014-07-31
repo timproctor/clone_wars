@@ -3,10 +3,9 @@ require_relative "./app/models/location"
 require_relative "./app/models/menu_items"
 
 class CloneWarsApp < Sinatra::Base
-  # DB
   set :root, 'lib/app'
   set :public_folder, File.dirname(__FILE__) + '/app/public'
-  set :session_secret, "calm"
+  set :session_secret, 'calm'
   set :method_override, true
 
   configure do
@@ -39,23 +38,27 @@ class CloneWarsApp < Sinatra::Base
   end
 
   get '/login/admin_dashboard' do
-    halt 401, 'GTFO' unless authenticated?
+    display_forbidden_if_non_admin
     haml :admin_dashboard
   end
 
-  get '/login/admin_dashboard/menu' do
-    halt 401, 'GTFO' unless authenticated?
-    haml :edit_menu, locals:{menu_items: DB[:menu_items].all}
+  get '/login/admin_dashboard/location' do
+    display_forbidden_if_non_admin
+    haml :edit_location, locals: {location: DB[:location].all.first} 
   end
 
+  get '/login/admin_dashboard/menu' do
+    display_forbidden_if_non_admin
+    haml :edit_menu, locals: {menu_items: DB[:menu_items].all}
+  end
 
   get '/login/admin_dashboard/menu/add_menu_item' do
-    halt 401, 'GTFO' unless authenticated?
+    display_forbidden_if_non_admin
     haml :add_menu_item
   end
 
   post '/login/admin_dashboard/menu/add_menu_item' do
-    halt 401, 'GTFO' unless authenticated?
+    display_forbidden_if_non_admin
     DB[:menu_items].insert(params[:menu])
     redirect '/login/admin_dashboard/menu'
   end
@@ -79,7 +82,6 @@ class CloneWarsApp < Sinatra::Base
     DB[:menu_items].where(:id => id.to_i).update(menu_item)
     redirect '/login/admin_dashboard/menu'
   end
-
 
   get '/login/login_failed' do
     haml :login_failed
@@ -113,6 +115,10 @@ class CloneWarsApp < Sinatra::Base
 
   def authenticated?
     session[:admin] == true
+  end
+
+  def display_forbidden_if_non_admin
+    halt 401, 'Forbidden' unless authenticated?
   end
 
 end

@@ -3,7 +3,11 @@ require 'sequel'
 
 Sequel::Model.plugin(:schema)
 
-DB = Sequel.sqlite("production.db")
+if ENV['RUBY_ENV'] == 'test'
+  DB = Sequel.sqlite("clone_wars_testing.db")
+else
+  DB = Sequel.sqlite("production.db")
+end
 
 unless DB.table_exists?(:menu_items)
   DB.create_table :menu_items do
