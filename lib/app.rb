@@ -1,6 +1,7 @@
-require_relative "./database"
-require_relative "./app/models/location"
-require_relative "./app/models/menu_items"
+require_relative "database"
+require_relative "app/models/location"
+require_relative "app/models/menu_items"
+require_relative "app/models/mail"
 
 class CloneWarsApp < Sinatra::Base
 
@@ -50,20 +51,16 @@ class CloneWarsApp < Sinatra::Base
 
   get '/login/admin_dashboard/location/:id' do |id|
     display_forbidden_if_non_admin
-    location = DB[:location].where(:id => id.to_i).to_a.first
+    location = Location.new(id)
 
-    haml :edit_location_item, locals: {location: location}
+    haml :edit_location_item, locals: {location: location.hash_data}
   end
 
   put '/login/admin_dashboard/location/:id' do |id|
     display_forbidden_if_non_admin
-    location = DB[:location].where(:id => id).to_a.first
-    location[:address]       = params[:address]
-    location[:email_address] = params[:email_address]
-    location[:phone_number]  = params[:phone_number]
-    location[:description]   = params[:description]
+    location = Location.new(id)
+    location.update_location(params)
 
-    DB[:location].where(:id => id.to_i).update(location)
     redirect '/login/admin_dashboard/location'
   end
 
@@ -79,33 +76,31 @@ class CloneWarsApp < Sinatra::Base
 
   post '/login/admin_dashboard/menu/add_menu_item' do
     display_forbidden_if_non_admin
-    DB[:menu_items].insert(params[:menu])
+    MenuItems.add_item(params[:menu])
 
     redirect '/login/admin_dashboard/menu'
   end
 
   delete '/login/admin_dashboard/menu/:id' do |id|
     display_forbidden_if_non_admin
-    DB[:menu_items].where(:id=>id.to_i).delete
+    MenuItems.delete_item(id)
 
     redirect '/login/admin_dashboard/menu'
   end
 
   get '/login/admin_dashboard/menu/:id' do |id|
     display_forbidden_if_non_admin
-    menu_item = DB[:menu_items].where(:id => id.to_i).to_a.first
+    menu_item = MenuItems.find(id)
+    # menu_item = DB[:menu_items].where(:id => id.to_i).to_a.first
+
 
     haml :edit_menu_item, locals: {menu_item: menu_item}
   end
 
   put '/login/admin_dashboard/menu/:id' do |id|
     display_forbidden_if_non_admin
-    menu_item               = DB[:menu_items].where(:id => id.to_i).to_a.first
-    menu_item[:name]        = params[:name]
-    menu_item[:ingredients] = params[:ingredients]
-    menu_item[:price]       = params[:price]
+    MenuItems.update_item(id, params)
 
-    DB[:menu_items].where(:id => id.to_i).update(menu_item)
     redirect '/login/admin_dashboard/menu'
   end
 
@@ -138,43 +133,28 @@ class CloneWarsApp < Sinatra::Base
   end
 
   post '/contact' do
-    require 'pony'
-
-    Pony.mail(
-      :from => params[:name] + "<" + params[:email] + ">",
-      :to => 'notarealemail192@gmail.com',
-      :subject => params[:name] + " has contacted you",
-      :body => params[:message],
-      :via => :smtp,
-      :via_options => {
-        :address              => 'smtp.gmail.com',
-        :port                 => '587',
-        :enable_starttls_auto => true,
-        :user_name            => 'notarealemail192',
-        :password             => 'notapassword',
-        :authentication       => :plain,
-        :domain               => 'localhost.localdomain'
-      })
-
+    MailDev.pony(params)
     redirect '/success'
   end
 
   get '/success' do
     haml :success
   end
-  # helpers
-  def authenticate
-    if params[:username] == settings.username && params[:password] == settings.password
-      session[:admin] = true
+
+  helpers do
+    def authenticate
+      if params[:username] == settings.username && params[:password] == settings.password
+        session[:admin] = true
+      end
     end
-  end
 
-  def authenticated?
-    session[:admin] == true
-  end
+    def authenticated?
+      session[:admin] == true
+    end
 
-  def display_forbidden_if_non_admin
-    halt 401, 'Forbidden' unless authenticated?
+    def display_forbidden_if_non_admin
+      halt 401, 'Forbidden' unless authenticated?
+    end
   end
 
 end

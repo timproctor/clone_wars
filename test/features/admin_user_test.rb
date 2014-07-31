@@ -24,6 +24,7 @@ class AdminUserTest < FeatureTest
     fill_in('password', with: 'snow')
     click_button('Login')
 
+    puts page.current_url
     assert page.has_css?('.admin-header')
   end
 
