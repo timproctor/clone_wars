@@ -59,6 +59,7 @@ class AdminUserTest < FeatureTest
   end
 
   def test_an_admin_user_can_add_a_menu_item
+    skip
     login_as_admin
     click_link('Menu')
     click_button('+')

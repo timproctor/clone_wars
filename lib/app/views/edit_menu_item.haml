@@ -1,4 +1,4 @@
-%h1 Editing shit
+%h1 Edit Menu Item:
 %form{action: "/login/admin_dashboard/menu/#{menu_item[:id]}", method: "POST"}
   %input{name: "name", type: "text", value: "#{menu_item[:name]}"}
   %textarea{name: "ingredients"}=menu_item[:ingredients]

@@ -48,6 +48,25 @@ class CloneWarsApp < Sinatra::Base
     haml :edit_location, locals: {location: DB[:location].all.first} 
   end
 
+  get '/login/admin_dashboard/location/:id' do |id|
+    display_forbidden_if_non_admin
+    location = DB[:location].where(:id => id.to_i).to_a.first
+
+    haml :edit_location_item, locals: {location: location}
+  end
+
+  put '/login/admin_dashboard/location/:id' do |id|
+    display_forbidden_if_non_admin
+    location = DB[:location].where(:id => id).to_a.first
+    location[:address]       = params[:address]
+    location[:email_address] = params[:email_address]
+    location[:phone_number]  = params[:phone_number]
+    location[:description]   = params[:description]
+
+    DB[:location].where(:id => id.to_i).update(location)
+    redirect '/login/admin_dashboard/location'
+  end
+
   get '/login/admin_dashboard/menu' do
     display_forbidden_if_non_admin
     haml :edit_menu, locals: {menu_items: DB[:menu_items].all}
@@ -61,20 +80,26 @@ class CloneWarsApp < Sinatra::Base
   post '/login/admin_dashboard/menu/add_menu_item' do
     display_forbidden_if_non_admin
     DB[:menu_items].insert(params[:menu])
+
     redirect '/login/admin_dashboard/menu'
   end
 
   delete '/login/admin_dashboard/menu/:id' do |id|
+    display_forbidden_if_non_admin
     DB[:menu_items].where(:id=>id.to_i).delete
+
     redirect '/login/admin_dashboard/menu'
   end
 
   get '/login/admin_dashboard/menu/:id' do |id|
+    display_forbidden_if_non_admin
     menu_item = DB[:menu_items].where(:id => id.to_i).to_a.first
+
     haml :edit_menu_item, locals: {menu_item: menu_item}
   end
 
   put '/login/admin_dashboard/menu/:id' do |id|
+    display_forbidden_if_non_admin
     menu_item               = DB[:menu_items].where(:id => id.to_i).to_a.first
     menu_item[:name]        = params[:name]
     menu_item[:ingredients] = params[:ingredients]
