@@ -5,6 +5,7 @@ require './lib/app'
 
 
 describe CloneWarsApp do
+
   include Rack::Test::Methods
 
   def app
@@ -30,4 +31,5 @@ describe CloneWarsApp do
     get '/specialties'
     assert last_response.ok?, "specialties"
   end
+  
 end

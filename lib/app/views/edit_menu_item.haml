@@ -1,5 +1,4 @@
 %h1 Editing shit
-
 %form{action: "/login/admin_dashboard/menu/#{menu_item[:id]}", method: "POST"}
   %input{name: "name", type: "text", value: "#{menu_item[:name]}"}
   %textarea{name: "ingredients"}=menu_item[:ingredients]

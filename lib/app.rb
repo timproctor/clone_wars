@@ -3,6 +3,7 @@ require_relative "./app/models/location"
 require_relative "./app/models/menu_items"
 
 class CloneWarsApp < Sinatra::Base
+
   set :root, 'lib/app'
   set :public_folder, File.dirname(__FILE__) + '/app/public'
   set :session_secret, 'calm'
@@ -107,6 +108,7 @@ class CloneWarsApp < Sinatra::Base
     haml :specialties
   end
 
+  # helpers
   def authenticate
     if params[:username] == settings.username && params[:password] == settings.password
       session[:admin] = true
